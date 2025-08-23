@@ -26,7 +26,7 @@ export const getSuggestedUsers = async (req, res) => {
     const users = await User.aggregate([
       {
         $match: {
-          _id: { $me: userId },
+          _id: { $ne: userId },
         },
       },
       { $sample: { size: 10 } },
@@ -39,7 +39,7 @@ export const getSuggestedUsers = async (req, res) => {
     suggestedUsers.forEach((user) => (user.password = null));
     res.status(200).json(suggestedUsers);
   } catch (error) {
-    console.log("Error in getSuggestedUsers: ".error.message);
+    console.log("Error in getSuggestedUsers: ", error.message);
     res.status(500).json({ error: error.message });
   }
 };
